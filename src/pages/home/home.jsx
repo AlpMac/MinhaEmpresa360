@@ -2,10 +2,7 @@ import ListaServico from '../../components/listaProxServico/listaServico.jsx';
 import Navbar from '../../components/navbar/navbar.jsx';
 import MenuLateral from '../../components/menu-lateral/menu-lateral.jsx';
 import Cart from "../../components/cart/cart.jsx";
-import whatsapp from "../../assets/botoes/whatsapp.svg";
-import botaoRota from "../../assets/botoes/map-pin.svg";
-import cancelar from "../../assets/botoes/slash.svg";
-import servicoRealizado from "../../assets/botoes/dollar-sign.svg";
+
 import "./home.css";
 import "../../style/global.css";
 //importamos o axios para fazer as requisições ao servidor
