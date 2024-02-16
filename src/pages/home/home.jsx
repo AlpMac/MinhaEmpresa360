@@ -9,33 +9,12 @@ import "../../style/global.css";
 import api from "../../services/api";
 //importamos o arquivo de rotas para pegar os dados do servidor
 import { useEffect, useState } from "react";
+import Grafico from '../../components/chart/chart.jsx';
 
 function Home() {
   
   
-    //criando o estado para armazenar os dados
-    const [servicoDados, setservicoDados] = useState([]);
-
-    useEffect(() => {
-        //fazendo a requisição ao servidor para pegar os dados
-        api.get("/")
-        .then((resp) => {
-            //setando os dados no estado
-            setservicoDados(resp.data);
-            
-        })
-        .catch((err) => {
-            alert("Erro ao buscar os dados");
-        });
-    }, []);
-    
-    function openSidebar() {
-      //criaremos o evento para abrir o sidebar disparamos openSidebar para o componente cart ouvir
-      //quando o botao for clicado vai chamar a funcao e o cart vai abrir
-      const event = new CustomEvent('openSidebar');
-      window.dispatchEvent(event);
-  }
-
+  
 
   return <>
     <div className='container'>
@@ -48,6 +27,8 @@ function Home() {
           <div className="col-lg-9 col-md-8">
           <div className="my-3 p-3 bg-white rounded box-shadow">
             <h6 className="border-bottom border-gray pb-2 mb-0">Próximos Serviços</h6>
+            < Grafico />
+
             <table className="table">
             <tbody>
             <ListaServico /> <Cart />
