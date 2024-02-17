@@ -18,7 +18,7 @@ function BoxDeDados() {
                 <button type="button" className="btn btn-info flex-fill w-100">Ganhos realizados<h3>10 R$</h3></button>
               </div>
               <div className="col-sm-6 mb-2">
-                <button type="button" className="btn btn-primary flex-fill w-100">Custos de atendimentos<h3>10 R$</h3></button>
+                <button type="button" className="btn bg-danger flex-fill w-100">Custos de atendimentos<h3>10 R$</h3></button>
               </div>
             </div>
           </div>
