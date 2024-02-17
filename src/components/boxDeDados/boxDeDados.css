@@ -1,0 +1,22 @@
+.porcentagemBox {
+    font-size: 80px
+}
+
+/* Estilos padrão para os botões */
+.btn {
+    width: 100%; /* Garante que os botões ocupem toda a largura */
+    margin-bottom: 10px; /* Adiciona um espaço entre os botões */
+    font-size: 16px; /* Tamanho padrão do texto */
+    /* Desabilita a interação com o botão */
+  }
+  
+/* Estilos específicos para telas menores, como celulares */
+@media screen and (max-width: 768px) {
+    .btn {
+      width: 48%; /* Divide os botões em 2 colunas */
+      margin-bottom: 10px; /* Adiciona um espaço entre os botões */
+      font-size: 14px; /* Tamanho menor do texto para telas menores */
+    }
+  
+
+  }

@@ -10,37 +10,37 @@ import api from "../../services/api";
 //importamos o arquivo de rotas para pegar os dados do servidor
 import { useEffect, useState } from "react";
 import Grafico from '../../components/chart/chart.jsx';
+import BoxDeDados from '../../components/boxDeDados/boxDeDados.jsx';
 
 function Home() {
-  
-  
-  
+  return (
+    <div className="container-fluid">
+      <Navbar />
+      
+      <div className="row">
+        <div className="col-lg-3 col-md-4 bg-white s">
+          <MenuLateral />
+        </div>
+        
+        <div className="col-lg-9 col-md-8">
+          <section className="content">
+            <div className="container-fluid">
+              <BoxDeDados />
+            </div>
+          </section>
 
-  return <>
-    <div className='container'>
-      <div className="container-fluid">
-        <div className="row">
-          <Navbar />    
-          <div className="col-lg-3 col-md-4 bg-white s">
-            <MenuLateral />
-          </div>
-          <div className="col-lg-9 col-md-8">
           <div className="my-3 p-3 bg-white rounded box-shadow">
             <h6 className="border-bottom border-gray pb-2 mb-0">Próximos Serviços</h6>
-            < Grafico />
-
-            <table className="table">
-            <tbody>
-            <ListaServico /> <Cart />
-          </tbody>
-        </table>
-           </div>
+            
+                <ListaServico />
+                <Cart />
+            
+            <Grafico />
           </div>
         </div>
       </div>
-     
     </div>
- </>
+  );
 }
 
 export default Home;
