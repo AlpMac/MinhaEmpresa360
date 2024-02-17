@@ -47,7 +47,7 @@ function ListaServico() {
                         <button alt="Obter Rota" className="icon-botao-rota btn btn-info rounded-0" onClick={() => window.open("https://www.google.com/maps/dir/minha+localizacao/" + servicoDadosBuscado.rua + "+" + servicoDadosBuscado.numero + "," + servicoDadosBuscado.cidade, "_blank")}>
                             ROTA
                         </button>
-                        <button  alt="Contato" className="icon-botao-whatsapp btn btn-success rounded-0">
+                        <button  alt="Contato" className="icon-botao-whatsapp btn btn-success rounded-0" onClick={() => window.open("https:wa.me/+55"+servicoDadosBuscado.telefone)}>
                             WHATSAPP
                         </button>
                     </div>
