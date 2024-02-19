@@ -5,10 +5,7 @@ import Cart from "../../components/cart/cart.jsx";
 
 import "./home.css";
 import "../../style/global.css";
-//importamos o axios para fazer as requisições ao servidor
-import api from "../../services/api";
-//importamos o arquivo de rotas para pegar os dados do servidor
-import { useEffect, useState } from "react";
+
 import Grafico from '../../components/chart/chart.jsx';
 import BoxDeDados from '../../components/boxDeDados/boxDeDados.jsx';
 

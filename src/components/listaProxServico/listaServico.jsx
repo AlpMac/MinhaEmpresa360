@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import servicoRealizado from "../../assets/botoes/dollar-sign.svg";
-import cancelar from "../../assets/botoes/slash.svg";
-import botaoRota from "../../assets/botoes/map-pin.svg";
-import whatsapp from "../../assets/botoes/whatsapp.svg";
+
 import api from "../../services/api";
 import "./listaServico.css";
 
@@ -13,6 +10,7 @@ function ListaServico() {
         api.get("/")
             .then((response) => {
                 setservicoDados(response.data);
+                
             })
             .catch((err) => {
                 alert("Erro ao buscar os dados");
