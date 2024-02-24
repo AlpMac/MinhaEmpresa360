@@ -5,7 +5,7 @@ function Navbar(){
 function ApagarToken(){
     localStorage.removeItem('token');
     localStorage.removeItem('id');
-    window.location.href = '/login';
+    window.location.href = '/';
 }
 
 return <div className="navbar">
@@ -15,7 +15,7 @@ return <div className="navbar">
                 <button className="botao">
                     <a href="/fazer" >Minha Empresa</a>
                 </button>
-                <button onClick={ApagarToken} className="botao"> <a href="/login" >SAIR</a></button>
+                <button onClick={ApagarToken} className="botao"> <a href="/" >SAIR</a></button>
             </div>
         </div>
                  

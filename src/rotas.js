@@ -9,9 +9,9 @@ function Rotas() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element= {<Home />}/>
+        <Route path="/" element= {<Login />}/>
         <Route path="/Clientes" element= {<GerenciaCliente/>}/>
-        <Route path="/Login" element= {<Login/>}/>
+        <Route path="/Home" element= {<Home/>}/>
 
         
       </Routes>

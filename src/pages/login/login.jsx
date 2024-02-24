@@ -19,7 +19,7 @@ const LoginForm = () => {
           localStorage.setItem('id', userId);
           
           // Redirecionar para a página de clientes
-          window.location.href = '/';
+          window.location.href = '/Home';
       } catch (error) {
            if (error.response.status === 401) {
               alert("Senha inválida. Por favor, verifique suas credenciais.");}
