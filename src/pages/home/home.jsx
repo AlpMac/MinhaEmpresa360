@@ -9,6 +9,7 @@ import "../../style/global.css";
 import Grafico from '../../components/chart/chart.jsx';
 import BoxDeDados from '../../components/boxDeDados/boxDeDados.jsx';
 
+
 function Home() {
   return (
     <div className="container-fluid">
@@ -22,6 +23,7 @@ function Home() {
         <div className="col-lg-9 col-md-8">
           <section className="content">
             <div className="container-fluid">
+              
               <BoxDeDados />
             </div>
           </section>
