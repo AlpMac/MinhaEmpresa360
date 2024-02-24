@@ -18,6 +18,14 @@ const LoginForm = () => {
           localStorage.setItem('token', token);
           localStorage.setItem('id', userId);
           
+          //salvar token no banco de dados
+          const response_token = await api.post('/salvar-token', { userId, token });
+          if (response_token.status === 201) {
+              console.log("Token salvo com sucesso!");
+          }
+ 
+
+
           // Redirecionar para a página de clientes
           window.location.href = '/Home';
       } catch (error) {
