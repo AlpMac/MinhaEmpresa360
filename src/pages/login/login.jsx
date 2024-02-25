@@ -29,7 +29,7 @@ const LoginForm = () => {
           // Redirecionar para a página de clientes
           window.location.href = '/Home';
       } catch (error) {
-           if (error.response.status === 401) {
+           if (error) {
               alert("Senha inválida. Por favor, verifique suas credenciais.");}
       }
   };
