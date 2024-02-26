@@ -1,5 +1,28 @@
 
+/* Estilos para o botão flutuante botoee de acao */
+@media (max-width: 800px) {
+    .fixed-left-buttons {
+      position: fixed;
+      bottom: 20px; /* Ajuste conforme necessário */
+      left: 20px; /* Ajuste conforme necessário */
+      z-index: 1000; /* Garante que os botões estejam acima de outros elementos */
+    }
+  }
+  .fixed-left-buttons {
+    position: relative; /* Define a posição relativa para permitir o posicionamento absoluto dentro */
+    left: 0; /* Define a posição à esquerda */
+    z-index: 1000; /* Garante que os botões estejam acima de outros elementos */
+  }
 
+
+  @media (max-width: 767px) {
+    .sticky-left-buttons {
+      position: sticky;
+      top: 0;
+      padding-top: 10px; /* Ajuste conforme necessário */
+      z-index: 1000;
+    }
+  }
 .img data-src{
     width: 32px; height: 32px;
 }
