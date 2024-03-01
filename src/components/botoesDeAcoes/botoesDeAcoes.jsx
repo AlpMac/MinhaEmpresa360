@@ -40,7 +40,7 @@ export default function DualSpeedDialTooltipOpen() {
 
   return (
     <>
-      <Box sx={{ height: 390, transform: "translateZ(0px)", flexGrow: 0 }}>
+      <Box sx={{ height: 390, transform: "translateZ(0px)", flexGrow: 1 , backgroundColor: "white"}}>
         <Backdrop open={openLeft || openRight} />
         <SpeedDial
           ariaLabel="Adicionar"
@@ -48,6 +48,7 @@ export default function DualSpeedDialTooltipOpen() {
           icon={<SpeedDialIcon />}
           onClose={handleLeftClose}
           onOpen={handleLeftOpen}
+          
           open={openLeft}
         >
           {actions.map((action) => (

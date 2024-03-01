@@ -1,4 +1,5 @@
 import ListaServico from '../../components/listaProxServico/listaServico.jsx';
+import ListaServico_v2 from '../../components/listaProxServico/listaServico.jsx';
 import Navbar from '../../components/navbar/navbar.jsx';
 import MenuLateral from '../../components/menu-lateral/menu-lateral.jsx';
 import Cart from "../../components/cart/cart.jsx";
@@ -30,6 +31,7 @@ function Home() {
             <h6 className="border-bottom border-gray pb-2 mb-0">Próximos Serviços</h6>
             <div className="row">
               <div className="col-lg-9 col-md-8">
+              
                 <ListaServico />
                 <Cart />
               </div>
