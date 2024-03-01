@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_SERVER = 'http://192.168.2.109:4513/';
+const URL_SERVER = 'http://192.168.2.108:4513/';
 // fazendo a conexão com o backend pelo axios 
 const api = axios.create({
 
