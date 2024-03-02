@@ -19,10 +19,9 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-
 function ListaServico() {
-  const [modalAberto, setModalAberto] = useState(false);
   const [servicoDados, setServicoDados] = useState([]);
+  const [servicoSelecionado, setServicoSelecionado] = useState(null); // Estado para armazenar o serviço selecionado
 
   useEffect(() => {
     api.get("/")
@@ -39,47 +38,52 @@ function ListaServico() {
     window.dispatchEvent(event);
   };
 
-  const handleAbrirModal = () => {
-    setModalAberto(true);
+  const handleAbrirModal = (servico) => {
+    setServicoSelecionado(servico); // Armazenando o serviço selecionado
   };
 
   const handleFecharModal = () => {
-    setModalAberto(false);
+    setServicoSelecionado(null); // Fechando o modal ao definir servicoSelecionado como null
   };
 
-  const renderServicos = () => {
-    const servicosPorData = {};
+  return (
+    <div className="container">
+      {servicoSelecionado && (
+        <AskModal
+          open={true}
+          
+          onClose={handleFecharModal}
+          title="Deseja realmente cancelar o serviço?"
+          data={{ // Passando os dados para o modal
+            data: servicoSelecionado.data_servico + ' ás '+ servicoSelecionado.hora_marcada,
+            endereco: `${servicoSelecionado.rua} ${servicoSelecionado.numero} ${servicoSelecionado.cidade}`,
+            valor : servicoSelecionado.valor
+          }}
+        />
+      )}
 
-    servicoDados.forEach(servico => {
-      if (!servicosPorData[servico.data_servico]) {
-        servicosPorData[servico.data_servico] = [];
-      }
-      servicosPorData[servico.data_servico].push(servico);
-    });
-
-    return Object.keys(servicosPorData).map((data_servico, index) => (
-      <div key={index} className={`mb-3 ${index !== 0 ? 'border-top pt-3' : ''}`}>
-        <Item>
-          <Box sx={{ fontSize: '12px', textTransform: 'uppercase' }}>
-            <div className="dia-servico bg-blue" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
-              <div className="dia" style={{ fontSize: '24px', color: 'red' }}>{data_servico}</div>
-              <div className='dia-semana'>{diasSemana(data_servico)}</div>
-            </div>
-          </Box>
-          <Box component="ul" aria-labelledby="category-a" sx={{ pl: 0 }}>
-            {servicosPorData[data_servico].map(servico => (
-              <Grid container spacing={1} marginTop={1} sx={{ bgcolor: 'honeydew' }}>
-                <Grid xs={12} className="endereco">
+      {servicoDados.map((servico, index) => (
+        <div key={index} className={`mb-3 ${index !== 0 ? 'border-top pt-3' : ''}`}>
+          <Item>
+            <Box sx={{ fontSize: '12px', textTransform: 'uppercase' }}>
+              <div className="dia-servico bg-blue" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+                <div className="dia" style={{ fontSize: '24px', color: 'red' }}>{servico.data_servico}</div>
+                <div className='dia-semana'>{diasSemana(servico.data_servico)}</div>
+              </div>
+            </Box>
+            <Box component="ul" aria-labelledby="category-a" sx={{ pl: 0 }}>
+              <Grid key={servico.id_servico} container spacing={1} marginTop={1} sx={{ bgcolor: 'honeydew' }}>
+                <Grid item xs={12} className="endereco">
                   {servico.rua} {servico.numero} às {servico.hora_marcada}
                 </Grid>
 
-                <Grid xs={12}>
+                <Grid item xs={12}>
                   <div className="d-flex justify-content-between align-items-center">
                     <button alt="Salvar" id={servico.id_servico}
                       onClick={() => openSidebar(servico.data_servico, servico.nome_cliente, servico.id_servico, `${servico.rua} ${servico.numero} ${servico.cidade}`)} className="icon-salvar-servico btn btn-primary rounded-0 ">
                       <PaymentsIcon />
                     </button>
-                    <button alt="Cancelar Serviço" onClick={handleAbrirModal} className="icon-cancelar-servico btn btn-danger rounded-0">
+                    <button alt="Cancelar Serviço" onClick={() => handleAbrirModal(servico)} className="icon-cancelar-servico btn btn-danger rounded-0">
                       <DangerousIcon />
                     </button>
                     <button alt="Obter Rota" className="icon-botao-rota btn btn-info rounded-0" onClick={() => window.open("https://www.google.com/maps/dir/minha+localizacao/" + servico.rua + "+" + servico.numero + "," + servico.cidade, "_blank")}>
@@ -90,19 +94,11 @@ function ListaServico() {
                     </button>
                   </div>
                 </Grid>
-
               </Grid>
-            ))}
-          </Box>
-        </Item>
-      </div>
-    ));
-  };
-
-  return (
-    <div className="container">
-      {renderServicos()}
-      <AskModal open={modalAberto} onClose={handleFecharModal} />
+            </Box>
+          </Item>
+        </div>
+      ))}
     </div>
   );
 }

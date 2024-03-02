@@ -8,15 +8,33 @@ import Typography from '@mui/material/Typography';
 import { useSpring, animated } from '@react-spring/web';
 
 const Fade = React.forwardRef(function Fade(props, ref) {
-  const { children, in: open, ...other } = props;
+  const {
+    children,
+    in: open,
+    onClick,
+    onEnter,
+    onExited,
+    ownerState,
+    ...other
+  } = props;
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
+    onStart: () => {
+      if (open && onEnter) {
+        onEnter(null, true);
+      }
+    },
+    onRest: () => {
+      if (!open && onExited) {
+        onExited(null, true);
+      }
+    },
   });
 
   return (
     <animated.div ref={ref} style={style} {...other}>
-      {children}
+      {React.cloneElement(children, { onClick })}
     </animated.div>
   );
 });
@@ -24,6 +42,10 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 Fade.propTypes = {
   children: PropTypes.element.isRequired,
   in: PropTypes.bool,
+  onClick: PropTypes.any,
+  onEnter: PropTypes.func,
+  onExited: PropTypes.func,
+  ownerState: PropTypes.any,
 };
 
 const style = {
@@ -38,7 +60,7 @@ const style = {
   p: 4,
 };
 
-function AskModal({ open, onClose }) {
+function AskModal({ open, onClose, title, data }) {
   return (
     <Modal
       aria-labelledby="spring-modal-title"
@@ -46,19 +68,21 @@ function AskModal({ open, onClose }) {
       open={open}
       onClose={onClose}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+   
     >
       <Fade in={open}>
         <Box sx={style}>
           <Typography id="spring-modal-title" variant="h6" component="h2">
-            Text in a modal
+            {title}
           </Typography>
           <Typography id="spring-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <strong>Data:</strong> {data.data}
+            <br />
+            <strong>Endereço:</strong> {data.endereco}
+            <br />
+            <strong>Valor do Serviço:</strong> {data.valor} R$
           </Typography>
+          <Button>Sim</Button>
           <Button onClick={onClose}>Fechar</Button>
         </Box>
       </Fade>
@@ -69,6 +93,8 @@ function AskModal({ open, onClose }) {
 AskModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired, // Alterado para aceitar um objeto contendo os dados
 };
 
 export default AskModal;
