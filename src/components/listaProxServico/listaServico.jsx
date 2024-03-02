@@ -64,6 +64,7 @@ function ListaServico() {
           onClose={handleFecharModal}
           title="Deseja realmente cancelar o serviço?"
           data={{ // Passando os dados para o modal
+            id_servico: servicoSelecionado.id_servico,
             data: servicoSelecionado.data_servico + ' ás '+ servicoSelecionado.hora_marcada,
             endereco: `${servicoSelecionado.rua} ${servicoSelecionado.numero} ${servicoSelecionado.cidade}`,
             valor : servicoSelecionado.valor

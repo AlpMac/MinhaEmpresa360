@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useSpring, animated } from '@react-spring/web';
+import api from "../../services/api.js";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -32,10 +33,10 @@ const Fade = React.forwardRef(function Fade(props, ref) {
     },
   });
 
-  return (
-    <animated.div ref={ref} style={style} {...other}>
-      {React.cloneElement(children, { onClick })}
-    </animated.div>
+  return React.createElement(
+    animated.div,
+    { ref: ref, style: style, ...other },
+    React.cloneElement(children, { onClick })
   );
 });
 
@@ -61,6 +62,27 @@ const style = {
 };
 
 function AskModal({ open, onClose, title, data }) {
+  const handleCancelarServico = () => {
+    // Verifica se o ID do serviço está presente nos dados
+    if (data.id_servico) {
+      // Chama a API para cancelar o serviço passando o ID como parâmetro
+      api.put('/servico-cancelar', { id_servico: data.id_servico })
+        .then((response) => {
+          // Exibe mensagem de sucesso ou tratamento adequado
+          console.log(response.data.message);
+          // Fecha o modal
+          onClose();
+        })
+        .catch((error) => {
+          // Trata erro caso ocorra
+          console.error('Erro ao cancelar o serviço:', error);
+        });
+    } else {
+      // Caso o ID do serviço não esteja presente nos dados, exibe um aviso
+      console.error('ID do serviço não encontrado nos dados.');
+    }
+  };
+
   return (
     <Modal
       aria-labelledby="spring-modal-title"
@@ -68,7 +90,6 @@ function AskModal({ open, onClose, title, data }) {
       open={open}
       onClose={onClose}
       closeAfterTransition
-   
     >
       <Fade in={open}>
         <Box sx={style}>
@@ -82,7 +103,7 @@ function AskModal({ open, onClose, title, data }) {
             <br />
             <strong>Valor do Serviço:</strong> {data.valor} R$
           </Typography>
-          <Button>Sim</Button>
+          <Button onClick={handleCancelarServico}>Sim</Button>
           <Button onClick={onClose}>Fechar</Button>
         </Box>
       </Fade>
@@ -94,7 +115,7 @@ AskModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired, // Alterado para aceitar um objeto contendo os dados
+  data: PropTypes.object.isRequired,
 };
 
 export default AskModal;
