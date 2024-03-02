@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -19,6 +19,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
+
 function ListaServico() {
   const [servicoDados, setServicoDados] = useState([]);
   const [servicoSelecionado, setServicoSelecionado] = useState(null); // Estado para armazenar o serviço selecionado
@@ -46,12 +47,20 @@ function ListaServico() {
     setServicoSelecionado(null); // Fechando o modal ao definir servicoSelecionado como null
   };
 
+  // Agrupar os serviços por data
+  const servicosPorData = servicoDados.reduce((acc, servico) => {
+    if (!acc[servico.data_servico]) {
+      acc[servico.data_servico] = [];
+    }
+    acc[servico.data_servico].push(servico);
+    return acc;
+  }, {});
+
   return (
     <div className="container">
       {servicoSelecionado && (
         <AskModal
           open={true}
-          
           onClose={handleFecharModal}
           title="Deseja realmente cancelar o serviço?"
           data={{ // Passando os dados para o modal
@@ -62,39 +71,41 @@ function ListaServico() {
         />
       )}
 
-      {servicoDados.map((servico, index) => (
+      {Object.entries(servicosPorData).map(([data, servicos], index) => (
         <div key={index} className={`mb-3 ${index !== 0 ? 'border-top pt-3' : ''}`}>
           <Item>
             <Box sx={{ fontSize: '12px', textTransform: 'uppercase' }}>
               <div className="dia-servico bg-blue" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
-                <div className="dia" style={{ fontSize: '24px', color: 'red' }}>{servico.data_servico}</div>
-                <div className='dia-semana'>{diasSemana(servico.data_servico)}</div>
+                <div className="dia" style={{ fontSize: '24px', color: 'red' }}>{data}</div>
+                <div className='dia-semana'>{diasSemana(data)}</div>
               </div>
             </Box>
             <Box component="ul" aria-labelledby="category-a" sx={{ pl: 0 }}>
-              <Grid key={servico.id_servico} container spacing={1} marginTop={1} sx={{ bgcolor: 'honeydew' }}>
-                <Grid item xs={12} className="endereco">
-                  {servico.rua} {servico.numero} às {servico.hora_marcada}
-                </Grid>
+              {servicos.map((servico, servicoIndex) => (
+                <Grid key={servico.id_servico + servicoIndex} container spacing={1} marginTop={1} sx={{ bgcolor: 'honeydew' }}>
+                  <Grid item xs={12} className="endereco">
+                    {servico.rua} {servico.numero} às {servico.hora_marcada}
+                  </Grid>
 
-                <Grid item xs={12}>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <button alt="Salvar" id={servico.id_servico}
-                      onClick={() => openSidebar(servico.data_servico, servico.nome_cliente, servico.id_servico, `${servico.rua} ${servico.numero} ${servico.cidade}`)} className="icon-salvar-servico btn btn-primary rounded-0 ">
-                      <PaymentsIcon />
-                    </button>
-                    <button alt="Cancelar Serviço" onClick={() => handleAbrirModal(servico)} className="icon-cancelar-servico btn btn-danger rounded-0">
-                      <DangerousIcon />
-                    </button>
-                    <button alt="Obter Rota" className="icon-botao-rota btn btn-info rounded-0" onClick={() => window.open("https://www.google.com/maps/dir/minha+localizacao/" + servico.rua + "+" + servico.numero + "," + servico.cidade, "_blank")}>
-                      <DriveEtaIcon />
-                    </button>
-                    <button alt="Contato" className="icon-botao-whatsapp btn btn-success rounded-0" onClick={() => window.open("https:wa.me/+55" + servico.telefone)}>
-                      <WhatsAppIcon />
-                    </button>
-                  </div>
+                  <Grid item xs={12}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <button alt="Salvar" id={servico.id_servico}
+                        onClick={() => openSidebar(servico.data_servico, servico.nome_cliente, servico.id_servico, `${servico.rua} ${servico.numero} ${servico.cidade}`)} className="icon-salvar-servico btn btn-primary rounded-0 ">
+                        <PaymentsIcon />
+                      </button>
+                      <button alt="Cancelar Serviço" onClick={() => handleAbrirModal(servico)} className="icon-cancelar-servico btn btn-danger rounded-0">
+                        <DangerousIcon />
+                      </button>
+                      <button alt="Obter Rota" className="icon-botao-rota btn btn-info rounded-0" onClick={() => window.open("https://www.google.com/maps/dir/minha+localizacao/" + servico.rua + "+" + servico.numero + "," + servico.cidade, "_blank")}>
+                        <DriveEtaIcon />
+                      </button>
+                      <button alt="Contato" className="icon-botao-whatsapp btn btn-success rounded-0" onClick={() => window.open("https:wa.me/+55" + servico.telefone)}>
+                        <WhatsAppIcon />
+                      </button>
+                    </div>
+                  </Grid>
                 </Grid>
-              </Grid>
+              ))}
             </Box>
           </Item>
         </div>
