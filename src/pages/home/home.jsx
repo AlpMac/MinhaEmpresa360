@@ -1,5 +1,4 @@
 import ListaServico from '../../components/listaProxServico/listaServico.jsx';
-import ListaServico_v2 from '../../components/listaProxServico/listaServico.jsx';
 import Navbar from '../../components/navbar/navbar.jsx';
 import MenuLateral from '../../components/menu-lateral/menu-lateral.jsx';
 import Cart from "../../components/cart/cart.jsx";
@@ -7,7 +6,7 @@ import Cart from "../../components/cart/cart.jsx";
 import "./home.css";
 import "../../style/global.css";
 import BotoesDeAcoes from '../../components/botoesDeAcoes/botoesDeAcoes.jsx';
-import Grafico from '../../components/chart/chart.jsx';
+//import Grafico from '../../components/chart/chart.jsx';
 import BoxDeDados from '../../components/boxDeDados/boxDeDados.jsx';
 
 function Home() {

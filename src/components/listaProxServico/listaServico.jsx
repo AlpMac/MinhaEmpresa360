@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import diasSemana from "../../utils/diaDaSemana.js";
 import PaymentsIcon from '@mui/icons-material/Payments';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
@@ -9,6 +9,7 @@ import DangerousIcon from '@mui/icons-material/Dangerous';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { styled } from '@mui/material/styles';
 import api from "../../services/api.js";
+import AskModal from "../../utils/Modals/askModal.js";
 import "./listaServico.css";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ListaServico() {
+  const [modalAberto, setModalAberto] = useState(false);
   const [servicoDados, setServicoDados] = useState([]);
 
   useEffect(() => {
@@ -32,10 +34,18 @@ function ListaServico() {
       });
   }, []);
 
-  function openSidebar(data_servico, nome_cliente, id_servico, endereco_cliente) {
+  const openSidebar = (data_servico, nome_cliente, id_servico, endereco_cliente) => {
     const event = new CustomEvent('openSidebar', { detail: { data_servico, nome_cliente, id_servico, endereco_cliente } });
     window.dispatchEvent(event);
-  }
+  };
+
+  const handleAbrirModal = () => {
+    setModalAberto(true);
+  };
+
+  const handleFecharModal = () => {
+    setModalAberto(false);
+  };
 
   const renderServicos = () => {
     const servicosPorData = {};
@@ -69,7 +79,7 @@ function ListaServico() {
                       onClick={() => openSidebar(servico.data_servico, servico.nome_cliente, servico.id_servico, `${servico.rua} ${servico.numero} ${servico.cidade}`)} className="icon-salvar-servico btn btn-primary rounded-0 ">
                       <PaymentsIcon />
                     </button>
-                    <button alt="Cancelar Serviço" className="icon-cancelar-servico btn btn-danger rounded-0">
+                    <button alt="Cancelar Serviço" onClick={handleAbrirModal} className="icon-cancelar-servico btn btn-danger rounded-0">
                       <DangerousIcon />
                     </button>
                     <button alt="Obter Rota" className="icon-botao-rota btn btn-info rounded-0" onClick={() => window.open("https://www.google.com/maps/dir/minha+localizacao/" + servico.rua + "+" + servico.numero + "," + servico.cidade, "_blank")}>
@@ -92,6 +102,7 @@ function ListaServico() {
   return (
     <div className="container">
       {renderServicos()}
+      <AskModal open={modalAberto} onClose={handleFecharModal} />
     </div>
   );
 }
