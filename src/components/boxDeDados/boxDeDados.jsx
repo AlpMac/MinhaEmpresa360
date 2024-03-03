@@ -134,26 +134,32 @@ function BoxDeDados() {
             <div className="col-sm-6 mb-2">
               <button type="button" className="btn btn-success flex-fill w-100" onClick={handleOpenModal}>
                 Atendimentos realizados<h3>{totalAtendimentos}</h3>
+                <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='S' /> {/* Renderiza a modal */}
               </button>
             </div>
             <div className="col-sm-6 mb-2">
+            <button type="button" className="btn btn-info flex-fill w-100" onClick={handleOpenModal}>
+                Ganhos realizados<h3>{totalEmRealAtendidos}</h3>
+              </button>
+             
+            </div>
+            <div className="col-sm-6 mb-2">
+             
               <button type="button" className="btn btn-warning flex-fill w-100" onClick={handleOpenModal}>
                 Cancelamentos realizados<h3>{totalCancelamentos}</h3>
-              </button>
-            </div>
-            <div className="col-sm-6 mb-2">
-              <button type="button" className="btn btn-info flex-fill w-100" onClick={handleOpenModal}>
-                Ganhos realizados<h3>{totalEmRealAtendidos}</h3>
+                <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='C' /> {/* Renderiza a modal */}
               </button>
             </div>
             <div className="col-sm-6 mb-2">
               <button type="button" className="btn bg-danger flex-fill w-100" onClick={handleOpenModal}>
                 Custos de atendimentos<h3>FAZER ...</h3>
+                
               </button>
             </div>
             <div className="col-sm-6 mb-2">
               <button type="button" className="btn bg-secondary flex-fill w-100" onClick={handleOpenModal}>
                 Serviços a fazer<h3>{totalAgendado}</h3>
+                <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='A'/> {/* Renderiza a modal */}
               </button>
             </div>
             <div className="col-sm-6 mb-2">
@@ -166,7 +172,7 @@ function BoxDeDados() {
       </section>
 
       {error && <div className="alert alert-danger">{error}</div>}
-      <EditableTableModal open={openModal} handleClose={handleCloseModal} /> {/* Renderiza a modal */}
+      
     </>
   );
 }

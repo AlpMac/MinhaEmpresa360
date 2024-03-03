@@ -5,19 +5,41 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 
-const EditableTableModal = () => {
+const EditableTableModal = ({ pesquisa }) => {
     const [servicoDados, setServicoDados] = useState([]);
     const [open, setOpen] = useState(false);
+    //const [pesquisa, setPesquisa] = useState("");
 
+    
     useEffect(() => {
-        api.get("/busca-atendimento-realizado")
-          .then((response) => {
-            setServicoDados(response.data);
-          })
-          .catch((err) => {
-            console.error("Erro ao buscar os dados:", err);
-          });
-    }, []);
+        if (pesquisa === "S") {
+            api.get(`/busca-atendimento-realizado`)
+                .then((response) => {
+                    setServicoDados(response.data);
+                })
+                .catch((err) => {
+                    console.error("Erro ao buscar os dados:", err);
+                });
+        } else if (pesquisa === "A") {
+            api.get(`/`)
+                .then((response) => {
+                    setServicoDados(response.data);
+                })
+                .catch((err) => {
+                    console.error("Erro ao buscar outros dados:", err);
+                });
+        } else if (pesquisa === "C") {
+            // Lógica para outro valor de pesquisa
+            api.get(`/busca-cancelamento-realizado`)
+            .then((response) => {
+                setServicoDados(response.data);
+            })
+            .catch((err) => {
+                console.error("Erro ao buscar outros dados:", err);
+            });
+
+        }
+    }, [pesquisa]);
 
     const handleClose = () => {
         setOpen(false);
@@ -32,7 +54,7 @@ const EditableTableModal = () => {
         Nome: item.nome_cliente,
         Data: item.data_servico,
         Valor: item.valor,
-        Endereco: item.endereco_cliente
+        Endereco: item.rua+", "+item.numero+", "+item.cidade
     }));
 
     const columns = [
@@ -53,6 +75,8 @@ const EditableTableModal = () => {
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
                     </div>
+
+
                     <Button variant="contained" onClick={handleClose}>Fechar</Button>
                 </Box>
             </Modal>
