@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useSpring, animated } from '@react-spring/web';
 import api from "../../services/api.js";
+import Alert from '@mui/material/Alert';
+
+
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -62,24 +65,20 @@ const style = {
 };
 
 function AskModal({ open, onClose, title, data }) {
+  const [alertType, setAlertType] = useState(null);
+
   const handleCancelarServico = () => {
-    // Verifica se o ID do serviço está presente nos dados
     if (data.id_servico) {
-      // Chama a API para cancelar o serviço passando o ID como parâmetro
       api.put('/servico-cancelar', { id_servico: data.id_servico })
         .then((response) => {
-          // Exibe mensagem de sucesso ou tratamento adequado
-          console.log(response.data.message);
-          // Fecha o modal
+          setAlertType('success');
           onClose();
         })
         .catch((error) => {
-          // Trata erro caso ocorra
-          console.error('Erro ao cancelar o serviço:', error);
+          setAlertType('error');
         });
     } else {
-      // Caso o ID do serviço não esteja presente nos dados, exibe um aviso
-      console.error('ID do serviço não encontrado nos dados.');
+      setAlertType('warning');
     }
   };
 
@@ -105,6 +104,13 @@ function AskModal({ open, onClose, title, data }) {
           </Typography>
           <Button onClick={handleCancelarServico}>Sim</Button>
           <Button onClick={onClose}>Fechar</Button>
+          {alertType && (
+            <Alert variant="filled" severity={alertType}>
+              {alertType === 'success' && 'Serviço cancelado com sucesso!'}
+              {alertType === 'error' && 'Erro ao excluir o serviço, tente novamente!'}
+              {alertType === 'warning' && 'Erro na requisição, contate o suporte!'}
+            </Alert>
+          )}
         </Box>
       </Fade>
     </Modal>
