@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import "./boxDeDados.css";
 import api from "../../services/api.js";
+import SearchIcon from '@mui/icons-material/Search';
+import EditableTableModal from '../buscaServicosTable/buscaServicosTable.jsx'; // Importe o componente da modal
 
 function BoxDeDados() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
   const [boxDeDados, setBoxDeDados] = useState([]);
-  
+  const [openModal, setOpenModal] = useState(false); // Estado para controlar a abertura da modal
+
   const [totalAtendimentos, setTotalAtendimentos] = useState(0);
   const [totalEmRealAtendidos, setTotalEmRealAtendidos] = useState(0);
 
@@ -16,6 +19,14 @@ function BoxDeDados() {
 
   const [totalAgendado, setTotalAgendado] = useState(0);
   const [totalEmRealAgendado, setTotalEmRealAgendado] = useState(0);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     const currentDate = new Date();
@@ -121,32 +132,32 @@ function BoxDeDados() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn btn-success flex-fill w-100" onClick={handleSearch}>
+              <button type="button" className="btn btn-success flex-fill w-100" onClick={handleOpenModal}>
                 Atendimentos realizados<h3>{totalAtendimentos}</h3>
               </button>
             </div>
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn btn-warning flex-fill w-100">
+              <button type="button" className="btn btn-warning flex-fill w-100" onClick={handleOpenModal}>
                 Cancelamentos realizados<h3>{totalCancelamentos}</h3>
               </button>
             </div>
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn btn-info flex-fill w-100">
+              <button type="button" className="btn btn-info flex-fill w-100" onClick={handleOpenModal}>
                 Ganhos realizados<h3>{totalEmRealAtendidos}</h3>
               </button>
             </div>
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn bg-danger flex-fill w-100">
+              <button type="button" className="btn bg-danger flex-fill w-100" onClick={handleOpenModal}>
                 Custos de atendimentos<h3>FAZER ...</h3>
               </button>
             </div>
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn bg-secondary flex-fill w-100">
+              <button type="button" className="btn bg-secondary flex-fill w-100" onClick={handleOpenModal}>
                 Serviços a fazer<h3>{totalAgendado}</h3>
               </button>
             </div>
             <div className="col-sm-6 mb-2">
-              <button type="button" className="btn bg-secondary flex-fill w-100">
+              <button type="button" className="btn bg-secondary flex-fill w-100" onClick={handleOpenModal}>
                 Ganhos esperados<h3>{totalEmRealAgendado}</h3>
               </button>
             </div>
@@ -155,6 +166,7 @@ function BoxDeDados() {
       </section>
 
       {error && <div className="alert alert-danger">{error}</div>}
+      <EditableTableModal open={openModal} handleClose={handleCloseModal} /> {/* Renderiza a modal */}
     </>
   );
 }
