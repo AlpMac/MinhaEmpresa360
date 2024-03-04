@@ -167,6 +167,18 @@ function BoxDeDados() {
                 Ganhos esperados<h3>{totalEmRealAgendado}</h3>
               </button>
             </div>
+            <div className="col-sm-6 mb-2">
+              <button type="button" className="btn bg-info flex-fill w-100" onClick={handleOpenModal}>
+                Venda de Produtos<h3>FAZER</h3>
+                <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='A'/> {/* Renderiza a modal */}
+              </button>
+            </div>
+
+            <div className="col-sm-6 mb-2">
+              <button type="button" className="btn bg-danger flex-fill w-100" onClick={handleOpenModal}>
+                Custo Fixo<h3>FAZER</h3>
+              </button>
+            </div>
           </div>
         </div>
       </section>

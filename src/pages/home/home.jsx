@@ -15,11 +15,11 @@ function Home() {
       <Navbar />
       
       <div className="row">
-        <div className="col-lg-3 col-md-4 bg-white s">
+        {/*<div className="col-lg-3 col-md-4 bg-white s">
           <MenuLateral />
-        </div>
+        </div>*/}
         
-        <div className="col-lg-9 col-md-8">
+        <div className="col-lg-12 col-md-8">
           <section className="content">
             <div className="container-fluid">
               <BoxDeDados />
