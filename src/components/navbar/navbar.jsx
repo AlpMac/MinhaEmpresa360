@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,17 +13,20 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import ModalCadastraCliente from '../../components/modalCadastraCliente/modalCadastraCliente.jsx'; // Importe o componente da modal
 
-const pages = ['Clientes','Servicos','Despesas'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  const [openModal, setOpenModal] = useState(false); // Estado para controlar a abertura da modal
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -33,6 +37,26 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+ 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleOpenModalClientes = () => {
+    setOpenModal(true); // Abre o modal ao clicar no item "Clientes"
+    handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Clientes"
+  };
+
+  const handleOpenModalServicos = () => {
+    // Lógica para abrir o modal para "Serviços"
+    handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Serviços"
+  };
+
+  const handleOpenModalDespesas = () => {
+    // Lógica para abrir o modal para "Despesas"
+    handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Despesas"
   };
 
   return (
@@ -87,11 +111,11 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleOpenModalClientes}>Clientes
+               </MenuItem>{/* Renderiza a modal */}
+           
+              <MenuItem onClick={handleOpenModalServicos}>Serviços</MenuItem>
+              <MenuItem onClick={handleOpenModalDespesas}>Despesas</MenuItem>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -114,15 +138,13 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+          <Button onClick={handleOpenModalClientes} sx={{ my: 2, color: 'white', display: 'block' }}>Clientes</Button>
+            <span>
+                <Button onClick={handleOpenModalServicos} sx={{ my: 2, color: 'white', display: 'block' }}>Serviços</Button>
+            </span>
+            <span>
+                <Button onClick={handleOpenModalDespesas} sx={{ my: 2, color: 'white', display: 'block' }}>Despesas</Button>
+            </span>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -133,7 +155,7 @@ function ResponsiveAppBar() {
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
-              id="menu-appbar"
+              id="user-menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: 'top',
@@ -156,7 +178,10 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
+      
+      <ModalCadastraCliente open={openModal} handleClose={handleCloseModal} />
     </AppBar>
+    
   );
 }
 export default ResponsiveAppBar;

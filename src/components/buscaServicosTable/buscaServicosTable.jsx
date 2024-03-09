@@ -8,7 +8,6 @@ import { DataGrid } from '@mui/x-data-grid';
 const EditableTableModal = ({ pesquisa }) => {
     const [servicoDados, setServicoDados] = useState([]);
     const [open, setOpen] = useState(false);
-    //const [pesquisa, setPesquisa] = useState("");
 
     
     useEffect(() => {
@@ -65,8 +64,8 @@ const EditableTableModal = ({ pesquisa }) => {
     ];
 
     return (
-        <div>
-            <Button variant="contained" onClick={handleOpen}>
+        <div className="w-100"> {/* Adiciona a classe w-100 para ocupar todo o espaço disponível */}
+            <Button variant="contained" onClick={handleOpen} className="w-100"> {/* Adiciona a classe w-100 para ocupar todo o espaço disponível */}
                 Visualizar Dados
             </Button>
             <Modal open={open} onClose={handleClose}>
