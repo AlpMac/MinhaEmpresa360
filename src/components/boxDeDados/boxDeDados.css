@@ -5,8 +5,9 @@
 /* Estilos padrão para os botões */
 .btn {
     width: 100%; /* Garante que os botões ocupem toda a largura */
-    margin-bottom: 10px; /* Adiciona um espaço entre os botões */
+    margin-bottom: 0px; /* Adiciona um espaço entre os botões */
     font-size: 16px; /* Tamanho padrão do texto */
+    border-radius: 0px; /* Remove a borda arredondada */
     /* Desabilita a interação com o botão */
   }
   
@@ -14,7 +15,9 @@
 @media screen and (max-width: 768px) {
     .btn {
       width: 48%; /* Divide os botões em 2 colunas */
-      margin-bottom: 10px; /* Adiciona um espaço entre os botões */
+      margin-bottom: 0px; /* Adiciona um espaço entre os botões */
+      border-radius: 0px; /* Remove a borda arredondada */
+
       font-size: 14px; /* Tamanho menor do texto para telas menores */
     }
   

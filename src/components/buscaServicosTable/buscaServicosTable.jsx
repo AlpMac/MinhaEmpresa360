@@ -64,8 +64,13 @@ const EditableTableModal = ({ pesquisa }) => {
     ];
 
     return (
-        <div className="w-100"> {/* Adiciona a classe w-100 para ocupar todo o espaço disponível */}
-            <Button variant="contained" onClick={handleOpen} className="w-100"> {/* Adiciona a classe w-100 para ocupar todo o espaço disponível */}
+        <div className="w-100 "> {/* Adiciona a classe w-100 para ocupar todo o espaço disponível */}
+            <Button 
+                variant="contained" 
+                onClick={handleOpen} 
+                className="w-100 btn-success" 
+                style={{ borderRadius: '0px' }} // Adiciona o estilo de border-radius
+            >
                 Visualizar Dados
             </Button>
             <Modal open={open} onClose={handleClose}>
