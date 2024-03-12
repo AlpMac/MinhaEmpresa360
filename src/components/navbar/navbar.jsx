@@ -13,15 +13,16 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import ModalCadastraCliente from '../../components/modalCadastraCliente/modalCadastraCliente.jsx'; // Importe o componente da modal
+import CollapsibleTable from '../modalCadastraCliente/modalEditaCliente.jsx'; // Importe o componente CollapsibleTable
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [openModal, setOpenModal] = useState(false); // Estado para controlar a abertura da modal
+  const [showTable, setShowTable] = useState(false); // Estado para controlar a exibição da tabela
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -39,23 +40,27 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
- 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
   const handleOpenModalClientes = () => {
-    setOpenModal(true); // Abre o modal ao clicar no item "Clientes"
-    handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Clientes"
+    // Verifica se a tabela está sendo exibida
+    if (showTable) {
+      // Se estiver sendo exibida, fecha a tabela
+      setShowTable(false);
+    } else {
+      // Caso contrário, exibe a tabela
+      setShowTable(true);
+      handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Clientes"
+    }
   };
 
   const handleOpenModalServicos = () => {
-    // Lógica para abrir o modal para "Serviços"
     handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Serviços"
   };
 
   const handleOpenModalDespesas = () => {
-    // Lógica para abrir o modal para "Despesas"
     handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Despesas"
   };
 
@@ -111,9 +116,7 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem onClick={handleOpenModalClientes}>Clientes
-               </MenuItem>{/* Renderiza a modal */}
-           
+              <MenuItem onClick={handleOpenModalClientes}>Clientes</MenuItem>
               <MenuItem onClick={handleOpenModalServicos}>Serviços</MenuItem>
               <MenuItem onClick={handleOpenModalDespesas}>Despesas</MenuItem>
             </Menu>
@@ -138,12 +141,12 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Button onClick={handleOpenModalClientes} sx={{ my: 2, color: 'white', display: 'block' }}>Clientes</Button>
+            <Button onClick={handleOpenModalClientes} sx={{ my: 2, color: 'white', display: 'block' }}>Clientes</Button>
             <span>
-                <Button onClick={handleOpenModalServicos} sx={{ my: 2, color: 'white', display: 'block' }}>Serviços</Button>
+              <Button onClick={handleOpenModalServicos} sx={{ my: 2, color: 'white', display: 'block' }}>Serviços</Button>
             </span>
             <span>
-                <Button onClick={handleOpenModalDespesas} sx={{ my: 2, color: 'white', display: 'block' }}>Despesas</Button>
+              <Button onClick={handleOpenModalDespesas} sx={{ my: 2, color: 'white', display: 'block' }}>Despesas</Button>
             </span>
           </Box>
 
@@ -178,10 +181,9 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
-      
-      <ModalCadastraCliente open={openModal} handleClose={handleCloseModal} />
+      {/* Renderiza a tabela se showTable for verdadeiro */}
+      {showTable && <CollapsibleTable />}
     </AppBar>
-    
   );
 }
 export default ResponsiveAppBar;
