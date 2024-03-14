@@ -18,8 +18,28 @@ import TextField from '@mui/material/TextField';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useState, useEffect } from 'react';
+import api from "../../services/api.js";
+
+function ListaClientees() {
+  const [servicoDados, setServicoDados] = useState([]);
+
+  useEffect(() => { api.get(`/busca-atendimento-realizado`)
+            .then((response) => {
+                setServicoDados(response.data);
+            })
+            .catch((err) => {
+                console.error("Erro ao buscar os dados:", err);
+            });
+          
+        },[]);
+}
+
+
 
 function createData(name, endereco, contato, lastService, valor, price) {
+
+
   return {
     name,
     endereco,

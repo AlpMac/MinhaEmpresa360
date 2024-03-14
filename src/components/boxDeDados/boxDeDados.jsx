@@ -3,7 +3,10 @@ import "./boxDeDados.css";
 import api from "../../services/api.js";
 import SearchIcon from '@mui/icons-material/Search';
 import EditableTableModal from '../buscaServicosTable/buscaServicosTable.jsx'; // Importe o componente da modal
-
+import SendIcon from '@mui/icons-material/Send';
+import { Button } from '@mui/material';
+import SaveServicoModal from '../CadastraServico/cadastraServico.jsx';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 function BoxDeDados() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -22,10 +25,14 @@ function BoxDeDados() {
 
   const handleOpenModal = () => {
     setOpenModal(true);
+    // Adiciona a classe ao body para desativar a rolagem
+    document.body.classList.add('modal-open');
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    // Remove a classe do body para reativar a rolagem
+    document.body.classList.remove('modal-open');
   };
 
   useEffect(() => {
@@ -106,7 +113,22 @@ function BoxDeDados() {
     <>
       <section className="content">
         <div className="container-fluid">
+        <div className="botao_acesso_rapido mb-4">
+            <div className="acesso-rapido">Acesso Rápido</div>
+            <div className="botoes ">
+              <Button className="BotaoCadastrarServico" onClick={handleOpenModal} variant="contained" endIcon={<SendIcon />}>
+                Cadastrar Serviço
+              </Button>
+              <SaveServicoModal open={openModal} onClose={handleCloseModal} />
+              <div style={{ margin: '0 10px' }}></div>
+              <Button className="BotaoCadastrarCliente" onClick={handleOpenModal} variant="contained" endIcon={<AccountCircleIcon />}>
+                Cadastrar Cliente
+              </Button>
+              <SaveServicoModal open={openModal} onClose={handleCloseModal} />
+            </div>
+          </div>
           <div className="row">
+            
             <div className="col-lg-6 col-12 mb-2">
               <div className="input-group">
                 <span className="input-group-text">Data Inicial</span>
@@ -119,8 +141,8 @@ function BoxDeDados() {
                 <input id="endDateInput" type="date" className="form-control" />
               </div>
             </div>
-            <div className="col-lg-2 col-12 mb-2">
-              <button type="button" className="btn btn-primary" onClick={handleSearch}>
+            <div className="col-lg-2 col-12 mb-2 d-flex">
+              <button type="button" className="btn btn-primary flex-grow-1" onClick={handleSearch}>
                 <i className="bi bi-search"></i> BUSCAR
               </button>
             </div>
@@ -131,13 +153,13 @@ function BoxDeDados() {
       <section className="content">
         <div className="container-fluid">
           <div className="row">
-          <div className="col-sm-6 mb-2">
-                <button type="button" className="btn btn-success flex-fill w-100" onClick={handleOpenModal}>
-                  Atendimentos realizados<h3>{totalAtendimentos}</h3>
-                </button>
-                <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='S' /> {/* Renderiza a modal */}
-              </div>
-              <div className="col-sm-6 mb-2">
+            <div className="col-sm-6 mb-2">
+              <button type="button" className="btn btn-success flex-fill w-100" onClick={handleOpenModal}>
+                Atendimentos realizados<h3>{totalAtendimentos}</h3>
+              </button>
+              <EditableTableModal open={openModal} handleClose={handleCloseModal} pesquisa='S' /> {/* Renderiza a modal */}
+            </div>
+            <div className="col-sm-6 mb-2">
                 <button type="button" className="btn btn-info flex-fill w-100" onClick={handleOpenModal}>
                   Ganhos realizados<h3>{totalEmRealAtendidos}</h3>
                 </button>
@@ -180,7 +202,6 @@ function BoxDeDados() {
       </section>
 
       {error && <div className="alert alert-danger">{error}</div>}
-      
     </>
   );
 }

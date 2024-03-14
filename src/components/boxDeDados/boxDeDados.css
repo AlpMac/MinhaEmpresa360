@@ -10,11 +10,37 @@
     border-radius: 0px; /* Remove a borda arredondada */
     /* Desabilita a interação com o botão */
   }
+  .modal-open {
+    overflow: hidden;
+  }
+
+  .botao_acesso_rapido {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   
+  .acesso-rapido {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .botoes {
+    display: flex;
+  
+    justify-content: center;
+  }
+  
+  .BotaoCadastrarServico,
+  .BotaoCadastrarCliente {
+    margin: 0 10px;
+    
+  }
 /* Estilos específicos para telas menores, como celulares */
 @media screen and (max-width: 768px) {
     .btn {
-      width: 48%; /* Divide os botões em 2 colunas */
+      width: 100%; /* Divide os botões em 2 colunas */
       margin-bottom: 0px; /* Adiciona um espaço entre os botões */
       border-radius: 0px; /* Remove a borda arredondada */
 

@@ -1,23 +1,9 @@
 import { useState } from 'react';
 import { Modal, Button, TextField } from '@mui/material';
+import api from "../../services/api.js";
+import './cadastraServico.css';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: '80%',
-    maxWidth: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-}));
-
-const SaveDataModal = ({ open, onClose }) => {
-  const classes = useStyles();
+const SaveServicoModal = ({ open, onClose }) => {
   const [dataServico, setDataServico] = useState('');
   const [valor, setValor] = useState('');
   const [observacao, setObservacao] = useState('');
@@ -52,7 +38,7 @@ const SaveDataModal = ({ open, onClose }) => {
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
     >
-      <div className={classes.paper}>
+      <div className="paper">
         <h2 id="simple-modal-title">Salvar Dados</h2>
         <form>
           <TextField
@@ -61,6 +47,7 @@ const SaveDataModal = ({ open, onClose }) => {
             value={dataServico}
             onChange={(e) => setDataServico(e.target.value)}
             fullWidth
+            TextField=""
           />
           <TextField
             label="Valor"
@@ -101,4 +88,4 @@ const SaveDataModal = ({ open, onClose }) => {
   );
 };
 
-export default SaveDataModal;
+export default SaveServicoModal;
