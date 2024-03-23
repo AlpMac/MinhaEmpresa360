@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import ModalCadastraProduto from '../CadastrarProduto/cadastrarProduto.jsx'; // Importe o componente ModalCadastraProduto
 import CollapsibleTable from '../modalEditarCliente/modalEditarCliente.jsx' ; // Importe o componente CollapsibleTable
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -23,6 +24,8 @@ function ResponsiveAppBar() {
   const [openModal, setOpenModal] = useState(false);
 
   const [showTable, setShowTable] = useState(false); // Estado para controlar a exibição da tabela
+
+  const [cadProduto, setCadProduto] = useState(false); // Estado para controlar a exibição do modal de cadastro de produto
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -56,12 +59,28 @@ function ResponsiveAppBar() {
     }
   };
 
+ 
+
   const handleOpenModalServicos = () => {
     handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Serviços"
   };
 
   const handleOpenModalDespesas = () => {
     handleCloseNavMenu(); // Fecha o menu de navegação após clicar em "Despesas"
+  };
+
+  // Função para abrir e fechar o modal de cadastro de produto
+  const handleOpenModalCadastrarProduto = () => {
+    if (cadProduto) {
+      setCadProduto(false);
+    } else {  
+      setCadProduto(true);
+    }
+    handleCloseNavMenu(); 
+    // Fecha o menu de navegação após clicar em "Cadastrar Produto"
+  }
+  const handleCloseModalCadastrarProduto = () => {
+    setCadProduto(false); // Função para fechar o modal de cadastro de produto
   };
 
   return (
@@ -119,6 +138,8 @@ function ResponsiveAppBar() {
               <MenuItem onClick={handleOpenModalClientes}>Clientes</MenuItem>
               <MenuItem onClick={handleOpenModalServicos}>Serviços</MenuItem>
               <MenuItem onClick={handleOpenModalDespesas}>Despesas</MenuItem>
+              <MenuItem onClick={handleOpenModalCadastrarProduto}>Cadastrar Produto</MenuItem>
+             
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -147,6 +168,9 @@ function ResponsiveAppBar() {
             </span>
             <span>
               <Button onClick={handleOpenModalDespesas} sx={{ my: 2, color: 'white', display: 'block' }}>Despesas</Button>
+            </span>
+            <span>
+            <Button onClick={handleOpenModalCadastrarProduto} sx={{ my: 2, color: 'white', display: 'block' }}>Cadastrar Produto</Button>
             </span>
           </Box>
 
@@ -178,11 +202,15 @@ function ResponsiveAppBar() {
                 </MenuItem>
               ))}
             </Menu>
+           
           </Box>
         </Toolbar>
       </Container>
       {/* Renderiza a tabela se showTable for verdadeiro */}
       {showTable && <CollapsibleTable />}
+
+      {/* Renderiza o modal de cadastro de produto se cadProduto for verdadeiro */}
+      {cadProduto && <ModalCadastraProduto open={true} onClose={handleCloseModalCadastrarProduto} />}
     </AppBar>
   );
 }
