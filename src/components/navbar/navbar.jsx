@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import CollapsibleTable from '../modalCadastraCliente/modalEditaCliente.jsx'; // Importe o componente CollapsibleTable
+import CollapsibleTable from '../modalEditarCliente/modalEditarCliente.jsx' ; // Importe o componente CollapsibleTable
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

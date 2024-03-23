@@ -6,6 +6,7 @@ import EditableTableModal from '../buscaServicosTable/buscaServicosTable.jsx'; /
 import SendIcon from '@mui/icons-material/Send';
 import { Button } from '@mui/material';
 import SaveServicoModal from '../CadastraServico/cadastraServico.jsx';
+import CadastraCliente from '../CadastrarCliente/cadastrarCliente.jsx';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 function BoxDeDados() {
   const [startDate, setStartDate] = useState("");
@@ -34,6 +35,22 @@ function BoxDeDados() {
     // Remove a classe do body para reativar a rolagem
     document.body.classList.remove('modal-open');
   };
+
+  const handleOpenModalCadastrarCliente = () => {
+    setOpenModal(true);
+    // Adiciona a classe ao body para desativar a rolagem
+    document.body.classList.add('modal-open');
+  };
+
+  const handleCloseModalCadastrarCliente = () => {
+    setOpenModal(false);
+    // Remove a classe do body para reativar a rolagem
+    document.body.classList.remove('modal-open');
+  };
+
+
+
+
 
   useEffect(() => {
     const currentDate = new Date();
@@ -121,10 +138,10 @@ function BoxDeDados() {
               </Button>
               <SaveServicoModal open={openModal} onClose={handleCloseModal} />
               <div style={{ margin: '0 10px' }}></div>
-              <Button className="BotaoCadastrarCliente" onClick={handleOpenModal} variant="contained" endIcon={<AccountCircleIcon />}>
+              <Button className="BotaoCadastrarCliente" onClick={handleOpenModalCadastrarCliente} variant="contained" endIcon={<AccountCircleIcon />}>
                 Cadastrar Cliente
               </Button>
-              <SaveServicoModal open={openModal} onClose={handleCloseModal} />
+              <CadastraCliente open={openModal} onClose={handleCloseModal} />
             </div>
           </div>
           <div className="row">
