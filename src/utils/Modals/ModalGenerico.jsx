@@ -95,7 +95,7 @@ function GenericModal({ open, onClose, onCloseParentModal, title, data, alertMes
             </Alert>
           )}
           <Box sx={buttonBarStyle}>
-            <Button onClick={handleClose}>Confirmar</Button>
+            <Button onClick={handleClose}>Confirmar </Button>
           </Box>
         </Box>
       </Fade>
