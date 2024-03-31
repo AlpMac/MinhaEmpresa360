@@ -3,7 +3,7 @@ import "./boxDeDados.css";
 import api from "../../services/api.js";
 import EditableTableModal from '../buscaServicosTable/buscaServicosTable.jsx'; // Importe o componente da modal
 import { Button } from '@mui/material';
-import SaveServicoModal from '../CadastraServico/cadastraServico.jsx';
+import CadastraServico from '../CadastraServico/cadastraServico.jsx';
 import CadastraCliente from '../CadastrarCliente/cadastrarCliente.jsx';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -17,6 +17,7 @@ function BoxDeDados() {
   const [error, setError] = useState("");
   const [boxDeDados, setBoxDeDados] = useState([]);
   const [openModal, setOpenModal] = useState(false); // Estado para controlar a abertura da modal
+  const [OpenModalCadastrarServico,sethandleOpenModalCadastrarServico] = useState(false);
 
   const [totalAtendimentos, setTotalAtendimentos] = useState(0);
   const [totalEmRealAtendidos, setTotalEmRealAtendidos] = useState(0);
@@ -38,6 +39,16 @@ function BoxDeDados() {
     // Remove a classe do body para reativar a rolagem
     document.body.classList.remove('modal-open');
   };
+
+  const handleOpenModalCadastrarServico = () => {
+    sethandleOpenModalCadastrarServico(true);
+  };
+
+  const handleCloseModalCadastrarServico = () => {
+    sethandleOpenModalCadastrarServico(false);
+  };
+
+
 
   const handleOpenModalCadastrarCliente = () => {
     setOpenModal(true);
@@ -146,7 +157,7 @@ function BoxDeDados() {
     <>
       <section className="content">
         <div className="container-fluid">
-        <WeatherApp cep="Rio Grande, BR" />
+        <WeatherApp cidade="Rio Grande" />
         <div className="botao_acesso_rapido mb-4">
             <div className="acesso-rapido">Acesso Rápido</div>
             <div className="botoes ">
@@ -154,10 +165,11 @@ function BoxDeDados() {
               <Button className="BotaoConsultarServico" onClick={handleOpenModalConsultarServico} variant="contained" endIcon={<VisibilityIcon />}>
               Consultar Serviço
                 </Button>
-              <Button className="BotaoCadastrarServico" onClick={handleOpenModal} variant="contained" endIcon={<AttachMoneyIcon />}>
+              <Button className="BotaoCadastrarServico" onClick={handleOpenModalCadastrarServico} variant="contained" endIcon={<AttachMoneyIcon />}>
               Cadastrar Serviço
               </Button>
-              <SaveServicoModal open={openModal} onClose={handleCloseModal} />
+              <CadastraServico open={OpenModalCadastrarServico} onClose={handleCloseModalCadastrarServico} />
+
               <Button className="BotaoCadastrarCliente" onClick={handleOpenModalCadastrarCliente} variant="contained" endIcon={<PersonAddIcon />}>
                 Cadastrar Cliente
               </Button>

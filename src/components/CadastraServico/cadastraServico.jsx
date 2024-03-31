@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Modal, Button, TextField } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, TextField, Autocomplete } from '@mui/material'; // Importe Autocomplete de '@mui/material'
 import api from "../../services/api.js";
 import './cadastraServico.css';
 
@@ -7,17 +7,34 @@ const SaveServicoModal = ({ open, onClose }) => {
   const [dataServico, setDataServico] = useState('');
   const [valor, setValor] = useState('');
   const [observacao, setObservacao] = useState('');
-  const [clienteId, setClienteId] = useState('');
   const [horaMarcada, setHoraMarcada] = useState('');
   const [usuarioId, setUsuarioId] = useState('');
+  const [clientes, setClientes] = useState([]); // Estado para armazenar a lista de clientes
+  const [clienteSelecionado, setClienteSelecionado] = useState(null); // Estado para armazenar o cliente selecionado
+
+  useEffect(() => {
+    // Carregue a lista de clientes ao montar o componente
+    fetchClientes();
+  }, []);
+
+  const fetchClientes = async () => {
+    try {
+      const response = await api.get('/busca-cliente'); // Supondo que "/clientes" seja o endpoint para obter a lista de clientes
+      setClientes(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar os clientes:', error);
+    }
+  };
 
   const handleSave = () => {
+    
     // Envie os dados para o servidor
-    api.post('/salvar-dados', {
+    api.post('/salvar-servico', {
+    
       data_servico: dataServico,
       valor: valor,
       observacao: observacao,
-      cliente_id: clienteId,
+      cliente_id: clienteSelecionado?.id, // Use o ID do cliente selecionado
       hora_marcada: horaMarcada,
       usuario_id: usuarioId
     })
@@ -30,7 +47,7 @@ const SaveServicoModal = ({ open, onClose }) => {
       console.error('Erro ao salvar os dados:', error);
     });
   };
-
+  
   return (
     <Modal
       open={open}
@@ -47,7 +64,7 @@ const SaveServicoModal = ({ open, onClose }) => {
             value={dataServico}
             onChange={(e) => setDataServico(e.target.value)}
             fullWidth
-            TextField=""
+            required
           />
           <TextField
             label="Valor"
@@ -55,6 +72,7 @@ const SaveServicoModal = ({ open, onClose }) => {
             value={valor}
             onChange={(e) => setValor(e.target.value)}
             fullWidth
+            required
           />
           <TextField
             label="Observação"
@@ -62,11 +80,15 @@ const SaveServicoModal = ({ open, onClose }) => {
             onChange={(e) => setObservacao(e.target.value)}
             fullWidth
           />
-          <TextField
-            label="ID do Cliente"
-            value={clienteId}
-            onChange={(e) => setClienteId(e.target.value)}
-            fullWidth
+          <Autocomplete
+            options={clientes}
+            getOptionLabel={(cliente) => cliente.nome+' | '+cliente.rua+', '+cliente.numero+' | '+cliente.telefone} // Supondo que o objeto cliente tenha uma propriedade "nome"
+            value={clienteSelecionado}
+            onChange={(event, newValue) => {
+              setClienteSelecionado(newValue);
+              console.log(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} label="Buscar Cliente" />}
           />
           <TextField
             label="Hora Marcada"
@@ -74,9 +96,10 @@ const SaveServicoModal = ({ open, onClose }) => {
             value={horaMarcada}
             onChange={(e) => setHoraMarcada(e.target.value)}
             fullWidth
+            required
           />
           <TextField
-            label="ID do Usuário"
+            label="Funcionário que realizou o serviço"
             value={usuarioId}
             onChange={(e) => setUsuarioId(e.target.value)}
             fullWidth
