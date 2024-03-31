@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import "./boxDeDados.css";
 import api from "../../services/api.js";
-import SearchIcon from '@mui/icons-material/Search';
 import EditableTableModal from '../buscaServicosTable/buscaServicosTable.jsx'; // Importe o componente da modal
-import SendIcon from '@mui/icons-material/Send';
 import { Button } from '@mui/material';
 import SaveServicoModal from '../CadastraServico/cadastraServico.jsx';
 import CadastraCliente from '../CadastrarCliente/cadastrarCliente.jsx';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import WeatherApp from '../buscaDadosMeteorologicos/clima.jsx';
+
 function BoxDeDados() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -40,6 +43,19 @@ function BoxDeDados() {
     setOpenModal(true);
     // Adiciona a classe ao body para desativar a rolagem
     document.body.classList.add('modal-open');
+  };
+
+  const handleOpenModalConsultarServico = () => { 
+    setOpenModal(true); 
+    document.body.classList.add('modal-consulta-servico');
+  };
+
+
+
+ const handleOpenModalConsultaCliente = () => {
+    setOpenModal(true);
+    // Adiciona a classe ao body para desativar a rolagem
+    document.body.classList.add('modal-consulta-cliente');
   };
 
   const handleCloseModalCadastrarCliente = () => {
@@ -130,18 +146,25 @@ function BoxDeDados() {
     <>
       <section className="content">
         <div className="container-fluid">
+        <WeatherApp cep="Rio Grande, BR" />
         <div className="botao_acesso_rapido mb-4">
             <div className="acesso-rapido">Acesso Rápido</div>
             <div className="botoes ">
-              <Button className="BotaoCadastrarServico" onClick={handleOpenModal} variant="contained" endIcon={<SendIcon />}>
-                Cadastrar Serviço
+            
+              <Button className="BotaoConsultarServico" onClick={handleOpenModalConsultarServico} variant="contained" endIcon={<VisibilityIcon />}>
+              Consultar Serviço
+                </Button>
+              <Button className="BotaoCadastrarServico" onClick={handleOpenModal} variant="contained" endIcon={<AttachMoneyIcon />}>
+              Cadastrar Serviço
               </Button>
               <SaveServicoModal open={openModal} onClose={handleCloseModal} />
-              <div style={{ margin: '0 10px' }}></div>
-              <Button className="BotaoCadastrarCliente" onClick={handleOpenModalCadastrarCliente} variant="contained" endIcon={<AccountCircleIcon />}>
+              <Button className="BotaoCadastrarCliente" onClick={handleOpenModalCadastrarCliente} variant="contained" endIcon={<PersonAddIcon />}>
                 Cadastrar Cliente
               </Button>
               <CadastraCliente open={openModal} onClose={handleCloseModal} />
+              <Button className="BotaoConsultarCliente" onClick={handleOpenModalConsultaCliente} variant="contained" endIcon={<PersonSearchIcon />}>
+                Consultar Cliente
+              </Button>
             </div>
           </div>
           <div className="row">

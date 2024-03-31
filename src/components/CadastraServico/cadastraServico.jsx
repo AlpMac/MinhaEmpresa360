@@ -39,7 +39,7 @@ const SaveServicoModal = ({ open, onClose }) => {
       aria-describedby="simple-modal-description"
     >
       <div className="paper">
-        <h2 id="simple-modal-title">Salvar Dados</h2>
+        <h2 id="simple-modal-title">Cadastrar serviço</h2>
         <form>
           <TextField
             label="Data do Serviço"

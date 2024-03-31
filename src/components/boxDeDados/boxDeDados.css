@@ -26,11 +26,6 @@
     margin-bottom: 10px;
   }
   
-  .botoes {
-    display: flex;
-  
-    justify-content: center;
-  }
   
   .BotaoCadastrarServico,
   .BotaoCadastrarCliente {
@@ -49,3 +44,35 @@
   
 
   }
+
+  /* boxDeDados.css */
+
+.botao_acesso_rapido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acesso-rapido {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.botoes .MuiButton-root {
+  margin: 5px;
+  min-width: 150px;
+  font-size: 1rem;
+  width: 100%; /* Adiciona largura de 100% para ocupar todo o espaço da div */
+}
+
+@media (max-width: 768px) {
+  .botoes .MuiButton-root {
+    min-width: 120px;
+  }
+}

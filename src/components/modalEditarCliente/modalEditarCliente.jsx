@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import api from "../../services/api.js";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 export default function TabelaClientes() {
   const [termoBusca, setTermoBusca] = useState('');
@@ -118,7 +119,17 @@ export default function TabelaClientes() {
               <TableRow key={row.nome_cliente}>
                 <TableCell>{row.nome_cliente}</TableCell>
                 <TableCell align="right">{row.rua}</TableCell>
-                <TableCell align="right">{row.telefone}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    aria-label="whatsapp"
+                    onClick={() => {
+                      window.location.href = `http://wa.me/+55${row.telefone}`;
+                    }}
+                  >
+                    <WhatsAppIcon />
+                  </IconButton>
+                  {/*{row.telefone}*/}
+                </TableCell>
                 <TableCell align="right">{row.data_servico}</TableCell>
                 <TableCell align="right">{row.valor}</TableCell>
               </TableRow>
