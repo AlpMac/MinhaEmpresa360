@@ -42,6 +42,7 @@ const SaveServicoModal = ({ open, onClose }) => {
       console.log('Dados salvos com sucesso!', response.data);
       // Feche o modal após salvar os dados
       onClose();
+      window.dispatchEvent(new CustomEvent('reloadListaServicos')); // Disparar evento para recarregar a lista de serviços
     })
     .catch((error) => {
       console.error('Erro ao salvar os dados:', error);

@@ -24,15 +24,31 @@ function ListaServico() {
   const [servicoDados, setServicoDados] = useState([]);
   const [servicoSelecionado, setServicoSelecionado] = useState(null); // Estado para armazenar o serviço selecionado
 
+
   useEffect(() => {
-    api.get("/")
-      .then((response) => {
+    const fetchServicos = async () => {
+      try {
+        const response = await api.get("/");
         setServicoDados(response.data);
-      })
-      .catch((err) => {
-        alert("Erro ao buscar os dados");
-      });
+      } catch (err) {
+        console.error("Erro ao buscar os dados");
+      }
+    };
+
+    fetchServicos();
+
+    // Adicionar ouvinte para o evento de recarregar a lista de serviços
+    window.addEventListener('reloadListaServicos', fetchServicos);
+
+    return () => {
+      // Remover o ouvinte ao desmontar o componente
+      window.removeEventListener('reloadListaServicos', fetchServicos);
+    };
   }, []);
+
+
+
+
 
   const openSidebar = (data_servico, nome_cliente, id_servico, endereco_cliente) => {
     const event = new CustomEvent('openSidebar', { detail: { data_servico, nome_cliente, id_servico, endereco_cliente } });
