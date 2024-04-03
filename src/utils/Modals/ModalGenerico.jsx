@@ -6,8 +6,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useSpring, animated } from '@react-spring/web';
 import Alert from '@mui/material/Alert';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const { children, in: open, ...other } = props;
@@ -36,7 +36,7 @@ const modalStyle = {
   width: '90%', // Alterado para ser responsivo
   maxWidth: 500, // Largura máxima do modal
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '2px solid',
   boxShadow: 24,
   p: 4,
 };
@@ -45,27 +45,35 @@ const buttonBarStyle = {
   display: 'flex',
   justifyContent: 'flex-end', // Botões à direita
   marginTop: 'auto', // Empurra a barra de botões para a parte inferior
+  color: 'white',
 };
 
-function GenericModal({ open, onClose, onCloseParentModal, title, data, alertMessage }) {
-  const [alertType, setAlertType] = useState('');
+const iconWrapperStyle = {
+  display: 'flex',
+  alignItems: 'left',
+};
+
+const iconStyle = {
+  marginLeft: 1,
+};
+
+function GenericModal({ open, onClose, onCloseParentModal, title, data, alertMessage, alertType }) {
   const [alertMessage2, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (alertMessage === 'success') {
       setAlertMessage(alertMessage);
-      setAlertType('success');
     } else {
       setAlertMessage('');
-      setAlertType('error');
     }
   }, [alertMessage]);
 
   const handleClose = () => {
     setAlertMessage('');
-    setAlertType('');
     onClose();
-    onCloseParentModal();
+    if (alertMessage === 'success') {
+      onCloseParentModal();
+    }
   };
 
   return (
@@ -78,14 +86,19 @@ function GenericModal({ open, onClose, onCloseParentModal, title, data, alertMes
     >
       <Fade in={open}>
         <Box sx={modalStyle}>
+          <Box sx={{ ...buttonBarStyle, ...(alertMessage === 'success' ? { bgcolor: 'green' } : { bgcolor: 'red' }) }}>
+            <div style={iconWrapperStyle}>
+              {alertMessage === 'success' && <CheckCircleOutlineIcon sx={iconStyle} />}
+              {alertMessage === 'error' && <ErrorOutlineIcon sx={iconStyle} />}
+            </div>
+          </Box>
           <Typography id="generic-modal-title" variant="h6" component="h2">
             {title}
-          
           </Typography>
           <Typography id="generic-modal-description" sx={{ mt: 2 }}>
             {data && (
               <>
-                <strong>Produto adicionado: </strong> {data}
+                <strong>Dado Adicionado: </strong> {data}
               </>
             )}
           </Typography>
@@ -95,7 +108,7 @@ function GenericModal({ open, onClose, onCloseParentModal, title, data, alertMes
             </Alert>
           )}
           <Box sx={buttonBarStyle}>
-            <Button onClick={handleClose}>Confirmar </Button>
+            <Button onClick={handleClose}>Confirmar</Button>
           </Box>
         </Box>
       </Fade>
@@ -110,6 +123,7 @@ GenericModal.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.string,
   alertMessage: PropTypes.string,
+  alertType: PropTypes.string,
 };
 
 export default GenericModal;

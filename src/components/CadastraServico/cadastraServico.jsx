@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, TextField, Autocomplete } from '@mui/material'; // Importe Autocomplete de '@mui/material'
+import { Modal, Button, TextField, Autocomplete } from '@mui/material';
+import GenericModal from '../../utils/Modals/ModalGenerico.jsx';
 import api from "../../services/api.js";
 import './cadastraServico.css';
 
@@ -9,106 +10,149 @@ const SaveServicoModal = ({ open, onClose }) => {
   const [observacao, setObservacao] = useState('');
   const [horaMarcada, setHoraMarcada] = useState('');
   const [usuarioId, setUsuarioId] = useState('');
-  const [clientes, setClientes] = useState([]); // Estado para armazenar a lista de clientes
-  const [clienteSelecionado, setClienteSelecionado] = useState(null); // Estado para armazenar o cliente selecionado
+  const [clientes, setClientes] = useState([]);
+  const [clienteSelecionado, setClienteSelecionado] = useState(null);
+  const [openGenericModal, setOpenGenericModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    title: '',
+    data: '',
+    alertType: '',
+  });
+
+  const handleOpenModal = (title, data, alertType) => {
+    setModalData({ title, data, alertType });
+    setOpenGenericModal(true);
+    document.body.classList.add('no-scroll'); // Adiciona a classe para desabilitar a rolagem
+  };
+
+  const clearFields = () => {
+    setDataServico('');
+    setValor('');
+    setObservacao('');
+    setHoraMarcada('');
+    setUsuarioId('');
+    setClienteSelecionado(null);
+  };
+  const handleCloseModal = () => {
+    clearFields(); // Limpa os campos ao fechar o modal
+    setOpenGenericModal(false);
+    document.body.classList.remove('no-scroll'); // Remove a classe para habilitar a rolagem
+  };
+
+  const handleCloseAllModals = () => {
+    handleCloseModal();
+    onClose(); // Fecha o modal pai
+  };
+
+  const handleSave = () => {
+    // Verifica se todos os campos obrigatórios foram preenchidos
+    if (!dataServico || !valor || !horaMarcada || !usuarioId) {
+      handleOpenModal('Erro ao salvar', 'Preencha todos os campos obrigatórios.', 'error');
+      return;
+    }
+
+    // Envia os dados para o servidor
+    api.post('/salvar-servico', {
+      data_servico: dataServico,
+      valor: valor,
+      observacao: observacao,
+      cliente_id: clienteSelecionado?.id,
+      hora_marcada: horaMarcada,
+      usuario_id: usuarioId
+    })
+    .then((response) => {
+      handleOpenModal('Sucesso', 'Dados salvos com sucesso!', 'success');
+    })
+    .catch((error) => {
+      handleOpenModal('Erro ao salvar os dados', 'Verifique suas informações e tente novamente.', 'error');
+    });
+  };
 
   useEffect(() => {
-    // Carregue a lista de clientes ao montar o componente
     fetchClientes();
   }, []);
 
   const fetchClientes = async () => {
     try {
-      const response = await api.get('/busca-cliente'); // Supondo que "/clientes" seja o endpoint para obter a lista de clientes
+      const response = await api.get('/busca-cliente');
       setClientes(response.data);
     } catch (error) {
       console.error('Erro ao carregar os clientes:', error);
     }
   };
 
-  const handleSave = () => {
-    
-    // Envie os dados para o servidor
-    api.post('/salvar-servico', {
-    
-      data_servico: dataServico,
-      valor: valor,
-      observacao: observacao,
-      cliente_id: clienteSelecionado?.id, // Use o ID do cliente selecionado
-      hora_marcada: horaMarcada,
-      usuario_id: usuarioId
-    })
-    .then((response) => {
-      console.log('Dados salvos com sucesso!', response.data);
-      // Feche o modal após salvar os dados
-      onClose();
-      window.dispatchEvent(new CustomEvent('reloadListaServicos')); // Disparar evento para recarregar a lista de serviços
-    })
-    .catch((error) => {
-      console.error('Erro ao salvar os dados:', error);
-    });
-  };
-  
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-    >
-      <div className="paper">
-        <h2 id="simple-modal-title">Cadastrar serviço</h2>
-        <form>
-          <TextField
-            label="Data do Serviço"
-            type="date"
-            value={dataServico}
-            onChange={(e) => setDataServico(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Valor"
-            type="number"
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Observação"
-            value={observacao}
-            onChange={(e) => setObservacao(e.target.value)}
-            fullWidth
-          />
-          <Autocomplete
-            options={clientes}
-            getOptionLabel={(cliente) => cliente.nome+' | '+cliente.rua+', '+cliente.numero+' | '+cliente.telefone} // Supondo que o objeto cliente tenha uma propriedade "nome"
-            value={clienteSelecionado}
-            onChange={(event, newValue) => {
-              setClienteSelecionado(newValue);
-              console.log(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} label="Buscar Cliente" />}
-          />
-          <TextField
-            label="Hora Marcada"
-            type="time"
-            value={horaMarcada}
-            onChange={(e) => setHoraMarcada(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Funcionário que realizou o serviço"
-            value={usuarioId}
-            onChange={(e) => setUsuarioId(e.target.value)}
-            fullWidth
-          />
-          <Button variant="contained" onClick={handleSave}>Salvar</Button>
-        </form>
-      </div>
-    </Modal>
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <div className="paper">
+          <h2 id="simple-modal-title">Cadastrar serviço</h2>
+          <form>
+            <TextField
+              label="Data do Serviço"
+              type="date"
+              value={dataServico}
+              onChange={(e) => setDataServico(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Valor"
+              type="number"
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Observação"
+              value={observacao}
+              onChange={(e) => setObservacao(e.target.value)}
+              fullWidth
+            />
+            <Autocomplete
+              options={clientes}
+              getOptionLabel={(cliente) => cliente.nome+' | '+cliente.rua+', '+cliente.numero+' | '+cliente.telefone}
+              value={clienteSelecionado}
+              onChange={(event, newValue) => {
+                setClienteSelecionado(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} label="Buscar Cliente NOME OU TELFONE" />}
+            />
+            <TextField
+              label="Hora Marcada"
+              type="time"
+              value={horaMarcada}
+              onChange={(e) => setHoraMarcada(e.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Funcionário que realizou o serviço"
+              value={usuarioId}
+              onChange={(e) => setUsuarioId(e.target.value)}
+              fullWidth
+              required
+            />
+            <Button variant="contained" onClick={handleSave}>Salvar</Button>
+          </form>
+        </div>
+      </Modal>
+      
+      {/* Modal Genérico */}
+      <GenericModal
+        open={openGenericModal}
+        onClose={handleCloseModal}
+        onCloseParentModal={handleCloseAllModals}
+        title={modalData.title}
+        data={modalData.data}
+        alertMessage={modalData.alertType}
+      />
+    </>
   );
 };
 
