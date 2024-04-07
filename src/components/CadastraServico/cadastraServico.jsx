@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, TextField, Autocomplete } from '@mui/material';
+import { Modal, Button, TextField, Autocomplete, Divider } from '@mui/material';
 import GenericModal from '../../utils/Modals/ModalGenerico.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import api from "../../services/api.js";
@@ -16,6 +16,9 @@ const SaveServicoModal = ({ open, onClose }) => {
   const [itensServico, setItensServico] = useState([]);
   const [itemSelecionado, setItemSelecionado] = useState(null);
   const [tabelaItens, setTabelaItens] = useState([]);
+  const [valorItensServico, setValorItensServico] = useState('');
+  const [valorTotalServico, setValorTotalServico] = useState(0);
+  const [valorCobradoValido, setValorCobradoValido] = useState(false);
 
   const [openGenericModal, setOpenGenericModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -38,6 +41,10 @@ const SaveServicoModal = ({ open, onClose }) => {
     setUsuarioId('');
     setClienteSelecionado(null);
     setItemSelecionado(null);
+    setTabelaItens([]);
+    setValorItensServico('');
+    setValorTotalServico(0);
+    setValorCobradoValido(false);
   };
 
   const handleCloseModal = () => {
@@ -81,6 +88,12 @@ const SaveServicoModal = ({ open, onClose }) => {
     fetchItensServico();
   }, []);
 
+  useEffect(() => {
+    // Calcula o valor total do serviço ao atualizar a tabela de itens
+    const total = tabelaItens.reduce((acc, item) => acc + Number(item.valorCobrado), 0);
+    setValorTotalServico(total);
+  }, [tabelaItens]);
+
   const fetchClientes = async () => {
     try {
       const response = await api.get('/busca-cliente');
@@ -100,11 +113,12 @@ const SaveServicoModal = ({ open, onClose }) => {
   };
 
   const handleAddItem = () => {
-    if (itemSelecionado) {
+    if (itemSelecionado && valorItensServico !== '') {
       const novoItem = {
         itemDescricaoServico: itemSelecionado.itemDescricaoServico,
         valorRecomendado: itemSelecionado.valorRecomendado,
-        tempoExecucao: itemSelecionado.tempoExecucao
+        tempoExecucao: itemSelecionado.tempoExecucao,
+        valorCobrado: valorItensServico
       };
   
       // Atualiza a tabela de itens com o novo item adicionado
@@ -113,13 +127,20 @@ const SaveServicoModal = ({ open, onClose }) => {
   
       // Limpa os campos após adicionar o item
       setItemSelecionado(null);
-      setValor('');
+      setValorItensServico('');
+    } else {
+      handleOpenModal('Erro ao adicionar item', 'Preencha o campo "Valor Cobrado" para adicionar o item.', 'error');
     }
   };
 
   const handleRemoveItem = (indexToRemove) => {
     const novaTabelaItens = tabelaItens.filter((item, index) => index !== indexToRemove);
     setTabelaItens(novaTabelaItens);
+  };
+
+  const handleValorCobradoChange = (value) => {
+    setValorItensServico(value);
+    setValorCobradoValido(value !== '');
   };
 
   return (
@@ -141,14 +162,7 @@ const SaveServicoModal = ({ open, onClose }) => {
               fullWidth
               required
             />
-            <TextField
-              label="Valor"
-              type="number"
-              value={valor}
-              onChange={(e) => setValor(e.target.value)}
-              fullWidth
-              required
-            />
+
             <TextField
               label="Observação"
               value={observacao}
@@ -179,7 +193,12 @@ const SaveServicoModal = ({ open, onClose }) => {
               fullWidth
               required
             />
-
+            <br></br>
+            <Divider />
+            <div className='divider'>
+              Itens Do Serviço
+              </div>
+            
             <Autocomplete
               options={itensServico}
               getOptionLabel={(item) => item.itemDescricaoServico+' | '+item.valorRecomendado+' R$'+' | '+item.tempoExecucao+' min'}
@@ -189,13 +208,33 @@ const SaveServicoModal = ({ open, onClose }) => {
               }}
               renderInput={(params2) => <TextField {...params2} label="Adicionar Item de Serviço" />}
             />
-            <Button variant="contained" onClick={handleAddItem}>Adicionar Item</Button>
+
+            <TextField
+              label="Valor Cobrado"
+              value={valorItensServico}
+              onChange={(e) => handleValorCobradoChange(e.target.value)}
+              fullWidth
+              required
+            />
+           
+            <Button variant="contained" onClick={handleAddItem} disabled={!valorCobradoValido}>Adicionar Item</Button>
+            <TextField
+              label="Valor Total do Serviço"
+              type="number"
+              value={valorTotalServico}
+              fullWidth
+              disabled
+            />
             
+          
+
+
             <table className='tableItens'>
               <thead>
                 <tr>
                   <th>Item de Serviço</th>
                   <th>Valor Recomendado</th>
+                  <th>Valor Cobrado</th>
                   <th>Tempo de Execução</th>
                   <th>Ações</th>
                 </tr>
@@ -205,6 +244,7 @@ const SaveServicoModal = ({ open, onClose }) => {
                   <tr key={index}>
                     <td>{item.itemDescricaoServico}</td>
                     <td>{item.valorRecomendado} R$</td>
+                    <td>{item.valorCobrado} R$</td>
                     <td>{item.tempoExecucao} Min</td>
                     <td>
                       <Button
