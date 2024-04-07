@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, TextField, Autocomplete } from '@mui/material';
 import GenericModal from '../../utils/Modals/ModalGenerico.jsx';
+import DeleteIcon from '@mui/icons-material/Delete';
 import api from "../../services/api.js";
 import './cadastraServico.css';
 
@@ -12,6 +13,10 @@ const SaveServicoModal = ({ open, onClose }) => {
   const [usuarioId, setUsuarioId] = useState('');
   const [clientes, setClientes] = useState([]);
   const [clienteSelecionado, setClienteSelecionado] = useState(null);
+  const [itensServico, setItensServico] = useState([]);
+  const [itemSelecionado, setItemSelecionado] = useState(null);
+  const [tabelaItens, setTabelaItens] = useState([]);
+
   const [openGenericModal, setOpenGenericModal] = useState(false);
   const [modalData, setModalData] = useState({
     title: '',
@@ -32,7 +37,9 @@ const SaveServicoModal = ({ open, onClose }) => {
     setHoraMarcada('');
     setUsuarioId('');
     setClienteSelecionado(null);
+    setItemSelecionado(null);
   };
+
   const handleCloseModal = () => {
     clearFields(); // Limpa os campos ao fechar o modal
     setOpenGenericModal(false);
@@ -58,7 +65,8 @@ const SaveServicoModal = ({ open, onClose }) => {
       observacao: observacao,
       cliente_id: clienteSelecionado?.id,
       hora_marcada: horaMarcada,
-      usuario_id: usuarioId
+      usuario_id: usuarioId,
+      itens_servico: tabelaItens // Adiciona os itens de serviço à requisição
     })
     .then((response) => {
       handleOpenModal('Sucesso', 'Dados salvos com sucesso!', 'success');
@@ -70,6 +78,7 @@ const SaveServicoModal = ({ open, onClose }) => {
 
   useEffect(() => {
     fetchClientes();
+    fetchItensServico();
   }, []);
 
   const fetchClientes = async () => {
@@ -81,6 +90,38 @@ const SaveServicoModal = ({ open, onClose }) => {
     }
   };
 
+  const fetchItensServico = async () => {
+    try {
+      const response = await api.get('/buscar-itens-servico');
+      setItensServico(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar os itens de serviço:', error);
+    }
+  };
+
+  const handleAddItem = () => {
+    if (itemSelecionado) {
+      const novoItem = {
+        itemDescricaoServico: itemSelecionado.itemDescricaoServico,
+        valorRecomendado: itemSelecionado.valorRecomendado,
+        tempoExecucao: itemSelecionado.tempoExecucao
+      };
+  
+      // Atualiza a tabela de itens com o novo item adicionado
+      const novaTabelaItens = [...tabelaItens, novoItem];
+      setTabelaItens(novaTabelaItens);
+  
+      // Limpa os campos após adicionar o item
+      setItemSelecionado(null);
+      setValor('');
+    }
+  };
+
+  const handleRemoveItem = (indexToRemove) => {
+    const novaTabelaItens = tabelaItens.filter((item, index) => index !== indexToRemove);
+    setTabelaItens(novaTabelaItens);
+  };
+
   return (
     <>
       <Modal
@@ -89,7 +130,7 @@ const SaveServicoModal = ({ open, onClose }) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <div className="paper">
+        <div className="paperCadastraServico">
           <h2 id="simple-modal-title">Cadastrar serviço</h2>
           <form>
             <TextField
@@ -138,6 +179,48 @@ const SaveServicoModal = ({ open, onClose }) => {
               fullWidth
               required
             />
+
+            <Autocomplete
+              options={itensServico}
+              getOptionLabel={(item) => item.itemDescricaoServico+' | '+item.valorRecomendado+' R$'+' | '+item.tempoExecucao+' min'}
+              value={itemSelecionado}
+              onChange={(event, newValue) => {
+                setItemSelecionado(newValue);
+              }}
+              renderInput={(params2) => <TextField {...params2} label="Adicionar Item de Serviço" />}
+            />
+            <Button variant="contained" onClick={handleAddItem}>Adicionar Item</Button>
+            
+            <table className='tableItens'>
+              <thead>
+                <tr>
+                  <th>Item de Serviço</th>
+                  <th>Valor Recomendado</th>
+                  <th>Tempo de Execução</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody className='tableItens'>
+                {tabelaItens.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.itemDescricaoServico}</td>
+                    <td>{item.valorRecomendado} R$</td>
+                    <td>{item.tempoExecucao} Min</td>
+                    <td>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleRemoveItem(index)}
+                      >
+                        Remover
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
             <Button variant="contained" onClick={handleSave}>Salvar</Button>
           </form>
         </div>

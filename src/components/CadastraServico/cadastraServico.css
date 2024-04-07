@@ -1,4 +1,4 @@
-.paper {
+.paperCadastraServico {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9,20 +9,61 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   width: 80%; /* Adicionado para ajustar a largura */
   max-width: 600px; /* Defina o valor máximo conforme necessário */
+  overflow-y: auto; /* Adicionado para permitir rolagem vertical dentro do modal */
 }
 
+
+
 @media screen and (max-width: 768px) {
-  .paper {
-    width: 90%; /* Ajuste para telas menores */
-    height: auto; /* Removido para ajuste automático */
-    top: 50%; /* Posicionamento vertical centralizado */
-    left: 50%; /* Posicionamento horizontal centralizado */
+  .tableItens{
+    font-size: 10px;
+  }
+  .paperCadastraServico {
+    width: 100%; /* Ajuste para telas menores */
+    height: 90%; /* Altura total */
+    bottom: 50px; /* Posicionamento vertical centralizado */
     transform: translate(-50%, -50%); /* Centralização */
     border-radius: 8px; /* Adicionado para manter bordas arredondadas */
   }
 }
 
-.modalBackdrop {
+.paperCadastraServico form {
+  display: flex;
+  flex-direction: column;
+}
+
+.paperCadastraServico form > * {
+  margin-bottom: 10px;
+}
+
+.paperCadastraServico form table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.paperCadastraServico form th,
+.paperCadastraServico form td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.paperCadastraServico form th {
+  background-color: #f2f2f2;
+}
+
+.paperCadastraServico form button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #000000;
+}
+
+.paperCadastraServico form button:hover {
+  color: #ffffff;
+}
+
+.modalBackdropCadastraServico {
   position: fixed;
   top: 0;
   left: 0;
@@ -32,4 +73,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: hidden; /* Removido rolagem vertical */
 }

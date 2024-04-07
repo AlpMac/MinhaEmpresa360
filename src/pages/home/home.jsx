@@ -16,7 +16,7 @@ function Home() {
 
         <div className="col-lg-12 col-md-12 mt-5">
           <section className="content">
-            <div className="container-fluid">
+            <div className="principal container-fluid">
               <BoxDeDados />
             </div>
           </section>
