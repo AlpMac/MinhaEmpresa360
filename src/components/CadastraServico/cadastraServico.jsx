@@ -60,20 +60,32 @@ const SaveServicoModal = ({ open, onClose }) => {
 
   const handleSave = () => {
     // Verifica se todos os campos obrigatórios foram preenchidos
-    if (!dataServico || !valor || !horaMarcada || !usuarioId) {
+    if (!dataServico || !valorTotalServico || !horaMarcada || !usuarioId) {
+      console.log(dataServico, valorTotalServico, horaMarcada, usuarioId);
       handleOpenModal('Erro ao salvar', 'Preencha todos os campos obrigatórios.', 'error');
       return;
     }
 
+    // Monta o array de itens de serviço a partir da tabela de itens
+  const itensServicoData = tabelaItens.map(item => ({
+    codigoItemContratado: item.codigoItemContratado,
+    itemDescricaoServico: item.itemDescricaoServico,
+    valorRecomendado: item.valorRecomendado,
+    tempoExecucao: item.tempoExecucao,
+    valorCobrado: item.valorCobrado
+  }));
+
+console.log(itensServicoData);
+
     // Envia os dados para o servidor
     api.post('/salvar-servico', {
       data_servico: dataServico,
-      valor: valor,
+      valor: valorTotalServico,
       observacao: observacao,
       cliente_id: clienteSelecionado?.id,
       hora_marcada: horaMarcada,
       usuario_id: usuarioId,
-      itens_servico: tabelaItens // Adiciona os itens de serviço à requisição
+      itens_servico: itensServicoData // Adiciona os itens de serviço à requisição
     })
     .then((response) => {
       handleOpenModal('Sucesso', 'Dados salvos com sucesso!', 'success');
@@ -115,23 +127,26 @@ const SaveServicoModal = ({ open, onClose }) => {
   const handleAddItem = () => {
     if (itemSelecionado && valorItensServico !== '') {
       const novoItem = {
+        codigoItemContratado: itemSelecionado.id_tipo,
         itemDescricaoServico: itemSelecionado.itemDescricaoServico,
         valorRecomendado: itemSelecionado.valorRecomendado,
         tempoExecucao: itemSelecionado.tempoExecucao,
         valorCobrado: valorItensServico
       };
-  
-      // Atualiza a tabela de itens com o novo item adicionado
-      const novaTabelaItens = [...tabelaItens, novoItem];
-      setTabelaItens(novaTabelaItens);
-  
-      // Limpa os campos após adicionar o item
-      setItemSelecionado(null);
-      setValorItensServico('');
-    } else {
-      handleOpenModal('Erro ao adicionar item', 'Preencha o campo "Valor Cobrado" para adicionar o item.', 'error');
-    }
-  };
+      
+    // Atualiza a tabela de itens com o novo item adicionado
+    setTabelaItens(prevState => [...prevState, novoItem]); // Use a função de atualização para garantir que a atualização seja imediata
+
+    // Coloca o console.log imediatamente após a atualização do estado
+    console.log(tabelaItens);
+
+    // Limpa os campos após adicionar o item
+    setItemSelecionado(null);
+    setValorItensServico('');
+  } else {
+    handleOpenModal('Erro ao adicionar item', 'Preencha o campo "Valor Cobrado" para adicionar o item.', 'error');
+  }
+};
 
   const handleRemoveItem = (indexToRemove) => {
     const novaTabelaItens = tabelaItens.filter((item, index) => index !== indexToRemove);
@@ -201,7 +216,7 @@ const SaveServicoModal = ({ open, onClose }) => {
             
             <Autocomplete
               options={itensServico}
-              getOptionLabel={(item) => item.itemDescricaoServico+' | '+item.valorRecomendado+' R$'+' | '+item.tempoExecucao+' min'}
+              getOptionLabel={(item) => item.id_tipo +' - '+ item.itemDescricaoServico+' | '+item.valorRecomendado+' R$'+' | '+item.tempoExecucao+' min'}
               value={itemSelecionado}
               onChange={(event, newValue) => {
                 setItemSelecionado(newValue);
